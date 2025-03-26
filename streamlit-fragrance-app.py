@@ -214,8 +214,8 @@ if st.session_state.current_stage == "concept":
                     },
                     "signature": "Unique selling point"
                 },
-                {...concept 2...},
-                {...concept 3...}
+                {"second concept structure..."},
+                {"third concept structure..."}
             ]
             """
             
@@ -360,4 +360,3 @@ elif st.session_state.current_stage == "accord":
                     <h3 class="accent-header">{accord['name']}</h3>
                     <p>{accord['description']}</p>
                     <p><strong>Contribution:</strong> {accord['contribution']}</p>
-                    
