@@ -1,67 +1,99 @@
 import streamlit as st
 import openai
 import plotly.express as px
+import pandas as pd
 
 # Title and Introduction
-st.title("AI-driven Flavour and Fragrance Creator")
-st.write("Easily craft unique scents and flavours using intuitive descriptions and AI-powered formulation suggestions.")
+st.set_page_config(layout="wide")
+st.title("AI-driven Flavour and Fragrance Creation Dashboard")
+st.write("An intuitive dashboard for creating, evaluating, and refining unique scents and flavours using advanced AI technology.")
 
-# Input OpenAI API Key
-openai_api_key = st.text_input("Enter your OpenAI API key:", type="password")
-if openai_api_key:
+# Sidebar for OpenAI API key and model selection
+st.sidebar.header("Settings")
+openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+model_choice = st.sidebar.selectbox("Select AI Model", ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"], index=0)
+
+if not openai_api_key:
+    st.warning("Enter your OpenAI API key in the sidebar to continue.")
+else:
     client = openai.OpenAI(api_key=openai_api_key)
 
-    # Step 1: User defines target
-    st.header("Define Your Target")
-    input_method = st.radio("Choose input method:", ["Natural Language Prompt", "Descriptor Selection"])
+    # Main Dashboard
+    st.header("Dashboard")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric(label="Active Projects", value="3")
+    with col2:
+        st.metric(label="Formulations Generated", value="12")
+    with col3:
+        st.metric(label="Frequently Used Ingredient", value="Citrus Oil")
 
-    if input_method == "Natural Language Prompt":
-        prompt = st.text_area("Describe your desired flavour or fragrance:", placeholder="e.g., a fresh, zesty citrus aroma with a hint of sweetness")
-    else:
+    st.subheader("Recent Activity")
+    recent_activity = pd.DataFrame({
+        "Activity": ["New formulation generated", "Feedback provided", "Project updated"],
+        "Project": ["Summer Breeze", "Spicy Delight", "Fresh Morning"],
+        "Time": ["2 mins ago", "10 mins ago", "1 hour ago"]
+    })
+    st.dataframe(recent_activity, use_container_width=True)
+
+    st.divider()
+
+    # Create New Project
+    st.header("Create or Select Project")
+    project_name = st.text_input("Project Name")
+    if st.button("Create New Project"):
+        st.success(f"Project '{project_name}' created!")
+
+    # Module 1: Define Target Scent/Flavour Profile
+    st.header("Module 1: Define Target Scent/Flavour Profile")
+    col1, col2 = st.columns(2)
+    with col1:
+        prompt = st.text_area("Natural Language Input", placeholder="Describe your scent or flavour...")
+    with col2:
         descriptors = ["Fruity", "Floral", "Spicy", "Sweet", "Sour", "Woody", "Creamy", "Nutty", "Fresh", "Herbal"]
         selected_descriptors = st.multiselect("Select descriptors:", descriptors)
-        prompt = "A scent/flavour with attributes: " + ", ".join(selected_descriptors)
 
-    # Optional Parameters
-    st.subheader("Optional: Set specific intensity parameters")
-    sweetness = st.slider("Sweetness Intensity", 0, 7, 3)
-    citrus = st.slider("Citrus Intensity", 0, 7, 3)
-    woody = st.slider("Woody Intensity", 0, 7, 3)
+    st.subheader("Adjust Sensory Intensity")
+    descriptor_values = {}
+    descriptor_cols = st.columns(len(selected_descriptors))
+    for i, desc in enumerate(selected_descriptors):
+        with descriptor_cols[i]:
+            descriptor_values[desc] = st.slider(desc, 0, 7, 3)
 
+    # Module 2: AI Processing and Formulation Generation
     if st.button("Generate Formulations"):
-        with st.spinner("Generating potential formulations..."):
+        with st.spinner("AI is analyzing and generating formulations..."):
+            ai_prompt = f"Generate a detailed fragrance/flavour formulation based on: {prompt}. Descriptors: {descriptor_values}."
             completion = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "You are an AI expert flavourist and perfumer, creating formulations based on user descriptions."},
-                    {"role": "user", "content": f"Generate a fragrance/flavour formulation for: {prompt}. Include ingredients and their proportions. Sweetness: {sweetness}/7, Citrus: {citrus}/7, Woody: {woody}/7."}
-                ]
+                model=model_choice,
+                messages=[{"role": "system", "content": "Create a detailed scent/flavour formulation based on given descriptors and intensities."},
+                          {"role": "user", "content": ai_prompt}]
             )
 
             formulation = completion.choices[0].message.content
 
-        # Display generated formulation
-        st.header("AI-Generated Formulation")
-        st.write(formulation)
+        # Module 3: Formulation Output and Comparison
+        st.header("Module 3: Generated Formulation")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write(formulation)
 
-        # Simulate Sensory Profile Visualization
-        attributes = {"Sweetness": sweetness, "Citrus": citrus, "Woody": woody}
-        fig = px.line_polar(r=attributes.values(), theta=attributes.keys(), line_close=True, title="Predicted Sensory Profile")
-        st.plotly_chart(fig)
+        with col2:
+            sensory_fig = px.line_polar(r=list(descriptor_values.values()), theta=list(descriptor_values.keys()), line_close=True, title="Predicted Sensory Profile")
+            st.plotly_chart(sensory_fig, use_container_width=True)
 
-        # User Feedback
-        st.header("Evaluate and Refine")
-        rating = st.slider("Rate this formulation", 1, 5, 3)
-        feedback = st.text_input("Provide additional feedback", placeholder="e.g., too floral, not enough citrus")
+        # Module 4: Feedback and Refinement
+        st.header("Module 4: Feedback and Refinement")
+        feedback_rating = st.slider("Overall Satisfaction", 1, 5, 3)
+        feedback_text = st.text_area("Qualitative Feedback", placeholder="Provide specific feedback...")
 
         if st.button("Generate Refined Variation"):
-            with st.spinner("Refining formulation based on feedback..."):
+            with st.spinner("Generating refined formulation based on feedback..."):
+                refine_prompt = f"Original: {formulation}\nRating: {feedback_rating}/5\nFeedback: {feedback_text}\nGenerate refined formulation."
                 refined_completion = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": "Refine the formulation based on user feedback."},
-                        {"role": "user", "content": f"Original formulation: {formulation}. User rating: {rating}/5. Feedback: {feedback}. Generate a refined version."}
-                    ]
+                    model=model_choice,
+                    messages=[{"role": "system", "content": "Refine the scent/flavour formulation based on user feedback."},
+                              {"role": "user", "content": refine_prompt}]
                 )
 
                 refined_formulation = refined_completion.choices[0].message.content
@@ -69,7 +101,8 @@ if openai_api_key:
             st.subheader("Refined Formulation")
             st.write(refined_formulation)
 
-            # Indicate iterative refinement
-            st.success("Refinement completed! You can further adjust parameters or provide additional feedback.")
-else:
-    st.warning("Please enter your OpenAI API key to use this app.")
+            st.success("Refinement completed successfully!")
+
+    # Module 5: Advanced Analysis and Visualisation
+    st.header("Module 5: Advanced Analysis")
+    st.write("Coming soon: Detailed molecular structure visualization, odor activity value predictions, and stability analysis.")
