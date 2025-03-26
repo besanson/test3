@@ -352,6 +352,12 @@ elif st.session_state.current_stage == "accord":
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
+                <h4>Ingredients:</h4>
+                    <ul>
+                    {"".join([f"<li>{ing['name']} - {ing['percentage']}%</li>" for ing in accord['ingredients']])}
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
             
             with tabs[1]:
                 accord = st.session_state.accords["middle_accord"]
