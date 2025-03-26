@@ -2,6 +2,7 @@ import streamlit as st
 import openai
 import plotly.express as px
 import pandas as pd
+import numpy as np
 
 # Title and Introduction
 st.set_page_config(layout="wide")
@@ -103,6 +104,18 @@ else:
 
             st.success("Refinement completed successfully!")
 
-    # Module 5: Advanced Analysis and Visualisation
+    # Module 5: Advanced Analysis
     st.header("Module 5: Advanced Analysis")
-    st.write("Coming soon: Detailed molecular structure visualization, odor activity value predictions, and stability analysis.")
+
+    st.subheader("Molecular Structure Visualization")
+    st.image("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/2244/PNG", caption="Example: Molecular Structure of Limonene")
+
+    st.subheader("Odor Activity Value (OAV) Prediction")
+    oav_data = pd.DataFrame({"Component": ["Limonene", "Citral", "Geraniol"], "OAV": [120, 85, 45]})
+    oav_fig = px.bar(oav_data, x="Component", y="OAV", title="Odor Activity Values")
+    st.plotly_chart(oav_fig, use_container_width=True)
+
+    st.subheader("Stability Analysis")
+    stability_data = pd.DataFrame({"Time (days)": np.arange(0, 31, 5), "Intensity (%)": [100, 95, 89, 80, 74, 68, 60]})
+    stability_fig = px.line(stability_data, x="Time (days)", y="Intensity (%)", title="Predicted Stability Over Time")
+    st.plotly_chart(stability_fig, use_container_width=True)
