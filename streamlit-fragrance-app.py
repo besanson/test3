@@ -9,7 +9,7 @@ st.write("Easily craft unique scents and flavours using intuitive descriptions a
 # Input OpenAI API Key
 openai_api_key = st.text_input("Enter your OpenAI API key:", type="password")
 if openai_api_key:
-    openai.api_key = openai_api_key
+    client = openai.OpenAI(api_key=openai_api_key)
 
     # Step 1: User defines target
     st.header("Define Your Target")
@@ -30,7 +30,7 @@ if openai_api_key:
 
     if st.button("Generate Formulations"):
         with st.spinner("Generating potential formulations..."):
-            completion = openai.ChatCompletion.create(
+            completion = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": "You are an AI expert flavourist and perfumer, creating formulations based on user descriptions."},
@@ -56,7 +56,7 @@ if openai_api_key:
 
         if st.button("Generate Refined Variation"):
             with st.spinner("Refining formulation based on feedback..."):
-                refined_completion = openai.ChatCompletion.create(
+                refined_completion = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": "Refine the formulation based on user feedback."},
