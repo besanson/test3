@@ -506,24 +506,28 @@ if st.session_state.current_project is None:
     """, unsafe_allow_html=True)
     
     with st.form("new_project_form"):
-        new_project_name = st.text_input("Project Name")
-        new_project_desc = st.text_area("Project Description", placeholder="Describe your fragrance project...")
+        new_project_name = st.text_input("Project Name", key="new_project_name_input")
+        new_project_desc = st.text_area("Project Description", placeholder="Describe your fragrance project...", key="new_project_desc_input")
         
         col1, col2 = st.columns(2)
         with col1:
-            fruity = st.slider("Fruity", 0, 7, 0)
-            floral = st.slider("Floral", 0, 7, 0)
-            spicy = st.slider("Spicy", 0, 7, 0)
-            sweet = st.slider("Sweet", 0, 7, 0)
+            fruity = st.slider("Fruity", 0, 7, 0, key="slider_fruity_new")
+            floral = st.slider("Floral", 0, 7, 0, key="slider_floral_new")
+            spicy = st.slider("Spicy", 0, 7, 0, key="slider_spicy_new")
+            sweet = st.slider("Sweet", 0, 7, 0, key="slider_sweet_new")
         with col2:
-            woody = st.slider("Woody", 0, 7, 0)
-            fresh = st.slider("Fresh", 0, 7, 0)
-            herbal = st.slider("Herbal", 0, 7, 0)
-            citrus = st.slider("Citrus", 0, 7, 0)
+            woody = st.slider("Woody", 0, 7, 0, key="slider_woody_new")
+            fresh = st.slider("Fresh", 0, 7, 0, key="slider_fresh_new")
+            herbal = st.slider("Herbal", 0, 7, 0, key="slider_herbal_new")
+            citrus = st.slider("Citrus", 0, 7, 0, key="slider_citrus_new")
         
         submit_btn = st.form_submit_button("Create Project")
-        
-        if submit_btn and new_project_name:
+    
+    # Process form outside the form block for better feedback
+    if submit_btn:
+        if not new_project_name:
+            st.error("Please provide a project name.")
+        else:
             profile = {}
             for attr, val in [("Fruity", fruity), ("Floral", floral), ("Spicy", spicy), 
                               ("Sweet", sweet), ("Woody", woody), ("Fresh", fresh), 
@@ -538,7 +542,9 @@ if st.session_state.current_project is None:
                 "description": new_project_desc
             }
             st.session_state.current_project = new_project_name
-            st.success(f"Project '{new_project_name}' created successfully!")
+            
+            success_msg = st.success(f"Project '{new_project_name}' created successfully! Redirecting to project workspace...")
+            time.sleep(2)
             st.rerun()
 
 # Project Workspace - shown when a project is selected
