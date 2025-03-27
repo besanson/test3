@@ -488,7 +488,7 @@ if st.session_state.current_project is None:
             
             if st.button("Open Project", key=f"open_{name}"):
                 st.session_state.current_project = name
-                st.experimental_rerun()
+                st.rerun()
     
     # Create New Project Form with premium styling
     st.markdown("""
@@ -539,7 +539,7 @@ if st.session_state.current_project is None:
             }
             st.session_state.current_project = new_project_name
             st.success(f"Project '{new_project_name}' created successfully!")
-            st.experimental_rerun()
+            st.rerun()
 
 # Project Workspace - shown when a project is selected
 else:
@@ -605,7 +605,7 @@ else:
                 profile = preset_combinations[preset]
                 st.session_state.projects[current]["profile"] = profile
                 st.success(f"Applied {preset} preset")
-                st.experimental_rerun()
+                st.rerun()
             
             # Create multi-column layout for sliders
             slider_cols = st.columns(3)
