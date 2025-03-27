@@ -501,7 +501,28 @@ if st.session_state.current_project is None:
     st.markdown("""
     <div class="info-box" style="margin-bottom: 20px;">
         <p style="margin: 0; color: #444;">
-            Create a new fragrance project by providing a name,
+            Create a new fragrance project by providing a name, description and sensory profile.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    with st.form("new_project_form"):
+        new_project_name = st.text_input("Project Name")
+        new_project_desc = st.text_area("Project Description", placeholder="Describe your fragrance project...")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            fruity = st.slider("Fruity", 0, 7, 0)
+            floral = st.slider("Floral", 0, 7, 0)
+            spicy = st.slider("Spicy", 0, 7, 0)
+            sweet = st.slider("Sweet", 0, 7, 0)
+        with col2:
+            woody = st.slider("Woody", 0, 7, 0)
+            fresh = st.slider("Fresh", 0, 7, 0)
+            herbal = st.slider("Herbal", 0, 7, 0)
+            citrus = st.slider("Citrus", 0, 7, 0)
+        
+        submit_btn = st.form_submit_button("Create Project")
         
         if submit_btn and new_project_name:
             profile = {}
