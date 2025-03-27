@@ -15,54 +15,197 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for a more professional look
+# Custom CSS for a sophisticated premium look
 st.markdown("""
 <style>
-    .main {
-        background-color: #f8f9fa;
+    /* Main color palette: dark purple, gold accents, subtle grays */
+    :root {
+        --primary-color: #3a2f5b;
+        --primary-dark: #2a1f4b;
+        --accent-color: #b8973d;
+        --accent-light: #d4b052;
+        --light-bg: #f5f5f7;
+        --dark-gray: #2d2d2d;
+        --medium-gray: #444;
+        --card-border: #eaeaea;
     }
-    .stButton button {
-        background-color: #4682B4;
-        color: white;
-        border-radius: 4px;
-        padding: 0.5rem 1rem;
+    
+    .main {
+        background: linear-gradient(150deg, var(--light-bg) 0%, #fff 100%);
+    }
+    
+    /* Custom header styling */
+    h1 {
+        color: var(--primary-color);
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+    
+    h2, h3 {
+        color: var(--primary-color);
         font-weight: 500;
     }
-    .stButton button:hover {
-        background-color: #36648B;
+    
+    /* Custom button styling */
+    .stButton > button {
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        border-radius: 4px;
+        padding: 0.5rem 1.2rem;
+        font-weight: 500;
+        border: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
     }
+    .stButton > button:hover {
+        background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-1px);
+    }
+    
+    /* Premium cards with subtle shadow and gold accent */
     .project-card {
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 15px;
-        margin-bottom: 10px;
+        border: 1px solid var(--card-border);
+        border-left: 3px solid var(--accent-color);
+        border-radius: 6px;
+        padding: 20px;
+        margin-bottom: 15px;
         background-color: white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        transition: all 0.2s ease;
     }
+    .project-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transform: translateY(-2px);
+    }
+    
+    /* Metric cards with gold accent */
     .metric-card {
         background-color: white;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        padding: 15px;
+        border-radius: 8px;
+        border-top: 3px solid var(--accent-color);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 18px;
     }
-    h1, h2, h3 {
-        color: #36648B;
+    .metric-card label {
+        color: var(--medium-gray);
+        font-size: 14px;
+        font-weight: 500;
     }
-    .stProgress .st-bo {
-        background-color: #4682B4;
+    .metric-card [data-testid="stMetricValue"] {
+        color: var(--primary-color);
+        font-weight: 600;
     }
+    
+    /* Progress bar styling */
+    .stProgress > div > div > div {
+        background-color: var(--accent-color);
+    }
+    
+    /* Dataframe styling */
     .stDataFrame {
-        border-radius: 5px;
+        border-radius: 6px;
+        border: 1px solid var(--card-border);
+    }
+    
+    /* Tabs styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 4px 4px 0px 0px;
+        padding: 8px 16px;
+        background-color: #f0f0f4;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: var(--primary-color) !important;
+        color: white !important;
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background-color: #fcfcfc;
+        border-right: 1px solid var(--card-border);
+    }
+    [data-testid="stSidebar"] [data-testid="stImage"] {
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
+    
+    /* Sliders styling */
+    [data-testid="stSlider"] > div > div {
+        background-color: var(--accent-light);
+    }
+    
+    /* Custom div for fancy sections */
+    .fancy-header {
+        background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 6px;
+        margin: 10px 0;
+        font-size: 1.2em;
+        font-weight: 500;
+    }
+    
+    .gold-accent {
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+    
+    .info-box {
+        background-color: rgba(58, 47, 91, 0.05);
+        border-left: 3px solid var(--primary-color);
+        padding: 15px;
+        border-radius: 4px;
+    }
+    
+    /* Custom tooltip */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted var(--accent-color);
+    }
+    .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: var(--dark-gray);
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Application header
-col1, col2 = st.columns([1, 5])
-with col1:
-    st.image("https://cdn-icons-png.flaticon.com/512/2674/2674505.png", width=80)
-with col2:
-    st.title("AI-driven Flavour & Fragrance Studio")
-    st.markdown("*Professional toolkit for fragrance formulation and development*")
+# Application header with premium styling
+st.markdown("""
+<div style="display: flex; align-items: center; background: linear-gradient(90deg, #3a2f5b 0%, #2a1f4b 100%); 
+            padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+    <img src="https://cdn-icons-png.flaticon.com/512/2674/2674505.png" width="80" 
+         style="filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));">
+    <div style="margin-left: 20px; color: white;">
+        <h1 style="margin: 0; color: white; font-size: 2.2em; letter-spacing: -0.5px;">
+            ESSENCE<span style="color: #d4b052; font-weight: 300;">&nbsp;STUDIO</span>
+        </h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 1.1em;">
+            Advanced AI-Driven Fragrance Formulation Platform
+        </p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # Session state initialization for projects and formulations
 if 'projects' not in st.session_state:
@@ -95,70 +238,168 @@ if 'formulations' not in st.session_state:
 
 # Sidebar for authentication and app settings
 with st.sidebar:
-    st.header("Settings")
-    with st.expander("Authentication", expanded=False):
-        openai_api_key = st.text_input("OpenAI API Key", type="password")
-        st.info("API key is required for AI formulation generation")
+    # Premium sidebar header
+    st.markdown("""
+    <div style="text-align:center; margin-bottom:20px;">
+        <img src="https://cdn-icons-png.flaticon.com/512/2674/2674505.png" width="60" 
+             style="filter: brightness(0.8); opacity: 0.9;">
+        <h3 style="color:#3a2f5b; margin-top:10px; margin-bottom:5px;">ESSENCE STUDIO</h3>
+        <p style="color:#666; font-size:0.85em; margin:0;">Professional Edition</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with st.expander("AI Model Settings", expanded=False):
-        model_choice = st.selectbox(
-            "Select AI Model", 
-            ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"], 
-            index=0
-        )
-        temperature = st.slider("Creativity (Temperature)", 0.0, 1.0, 0.7, 0.1)
+    # Authentication section with premium styling
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f5f5f7 0%, #fff 100%); 
+                padding: 12px; border-radius: 6px; border-left: 3px solid #b8973d; margin-bottom: 20px;">
+        <h4 style="color: #3a2f5b; margin-top:0; margin-bottom:10px; font-size: 1.1em;">
+            <span style="color: #b8973d;">✦</span> Authentication
+        </h4>
+    """, unsafe_allow_html=True)
+    openai_api_key = st.text_input("API Key", type="password", 
+                                 help="Your OpenAI API key is required for AI formulation generation")
+    st.markdown("</div>", unsafe_allow_html=True)
     
-    with st.expander("Display Settings", expanded=False):
-        show_molecular = st.checkbox("Show Molecular Structures", True)
-        show_stability = st.checkbox("Show Stability Analysis", True)
-        show_advanced = st.checkbox("Show Advanced Metrics", False)
+    # AI Model Settings with enhanced styling
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f5f5f7 0%, #fff 100%); 
+                padding: 12px; border-radius: 6px; border-left: 3px solid #b8973d; margin-bottom: 20px;">
+        <h4 style="color: #3a2f5b; margin-top:0; margin-bottom:10px; font-size: 1.1em;">
+            <span style="color: #b8973d;">✦</span> AI Engine Settings
+        </h4>
+    """, unsafe_allow_html=True)
+    model_choice = st.selectbox(
+        "AI Model", 
+        ["gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"], 
+        index=0,
+        help="Select the AI model that will power your fragrance formulations"
+    )
+    temperature = st.slider("Creativity", 0.0, 1.0, 0.7, 0.1, 
+                          help="Higher values produce more creative results, lower values are more focused")
+    st.markdown("</div>", unsafe_allow_html=True)
     
-    st.divider()
+    # Display Settings with toggle switches
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f5f5f7 0%, #fff 100%); 
+                padding: 12px; border-radius: 6px; border-left: 3px solid #b8973d; margin-bottom: 20px;">
+        <h4 style="color: #3a2f5b; margin-top:0; margin-bottom:10px; font-size: 1.1em;">
+            <span style="color: #b8973d;">✦</span> Display Preferences
+        </h4>
+    """, unsafe_allow_html=True)
+    show_molecular = st.toggle("Molecular Structures", True, 
+                             help="Show molecular structure visualizations for ingredients")
+    show_stability = st.toggle("Stability Analysis", True, 
+                             help="Show stability and longevity analysis charts")
+    show_advanced = st.toggle("Advanced Analytics", False, 
+                            help="Enable advanced metrics and detailed analytics views")
+    st.markdown("</div>", unsafe_allow_html=True)
     
-    # Project navigation
-    st.subheader("Project Navigation")
+    st.markdown("""<hr style="margin: 30px 0; border: none; height: 1px; background: #ddd;">""", 
+              unsafe_allow_html=True)
+    
+    # Project navigation with enhanced UI
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #3a2f5b 0%, #2a1f4b 100%); 
+                padding: 15px; border-radius: 6px; margin-bottom: 20px; color: white;">
+        <h4 style="margin:0 0 10px 0; color: white; font-size: 1.1em;">
+            <span style="color: #d4b052;">✦</span> Project Navigation
+        </h4>
+    """, unsafe_allow_html=True)
+    
     if st.session_state.projects:
         project_options = list(st.session_state.projects.keys())
         project_options.insert(0, "Create New Project")
-        selected_project = st.selectbox("Select or Create Project", project_options)
+        selected_project = st.selectbox("Select or Create", project_options, label_visibility="collapsed")
         
         if selected_project != "Create New Project":
             st.session_state.current_project = selected_project
-            st.info(f"Working on: {selected_project}")
-            if st.button("Export Project", key="export_btn"):
+            st.markdown(f"""
+            <div style="background: rgba(255,255,255,0.1); padding: 8px; border-radius: 4px; margin-top: 10px;">
+                <p style="margin:0; color: white; font-size: 0.9em;">
+                    <span style="opacity: 0.8;">Current project:</span><br>
+                    <strong>{selected_project}</strong>
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if st.button("Export Project Data", key="export_btn", 
+                       help="Export your project as JSON for backup or sharing"):
                 st.success("Project exported successfully!")
+                time.sleep(1)
         else:
             st.session_state.current_project = None
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # User account section
+    st.markdown("""
+    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; text-align: center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" width="40" 
+             style="border-radius: 50%; border: 2px solid #b8973d; padding: 2px;">
+        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.85em;">
+            Premium Account · <span style="color: #b8973d;">Active</span>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Main content area depends on whether a project is selected or not
 if not openai_api_key:
-    st.warning("Please enter your OpenAI API key in the sidebar to continue.")
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #3a2f5b 0%, #2a1f4b 100%); 
+                padding: 25px; border-radius: 10px; text-align: center; 
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://cdn-icons-png.flaticon.com/512/6357/6357048.png" width="60" 
+             style="margin-bottom: 15px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));">
+        <h2 style="color: white; margin-bottom: 15px; font-weight: 500;">Authentication Required</h2>
+        <p style="color: white; opacity: 0.9; margin-bottom: 20px; font-size: 16px;">
+            Please enter your OpenAI API key in the settings panel to access the full functionality of the Essence Studio platform.
+        </p>
+        <div style="background: rgba(255,255,255,0.15); padding: 12px; border-radius: 6px; backdrop-filter: blur(5px);">
+            <p style="color: #d4b052; margin: 0; font-weight: 500;">
+                Your key enables secure communication with our AI formulation engine.
+            </p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     st.stop()
 else:
     client = openai.OpenAI(api_key=openai_api_key)
 
 # Dashboard - shown when no project is selected
 if st.session_state.current_project is None:
-    st.header("Dashboard")
+    st.markdown("""
+    <div class="fancy-header">
+        <i class="fas fa-chart-line"></i> Dashboard Overview
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Project metrics in attractive cards
+    # Current date and time display
+    current_time = datetime.now().strftime("%A, %B %d, %Y")
+    st.markdown(f"""
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <p style="color: #666; font-size: 1.1em;"><i>Welcome to your fragrance workspace</i></p>
+        <p style="color: #666; font-size: 1.1em;">{current_time}</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Project metrics in premium styled cards
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric(label="Active Projects", value=len(st.session_state.projects))
+        st.metric(label="ACTIVE PROJECTS", value=len(st.session_state.projects))
         st.markdown('</div>', unsafe_allow_html=True)
     with col2:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
         total_formulations = sum(project["formulations"] for project in st.session_state.projects.values())
-        st.metric(label="Total Formulations", value=total_formulations)
+        st.metric(label="TOTAL FORMULATIONS", value=total_formulations)
         st.markdown('</div>', unsafe_allow_html=True)
     with col3:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric(label="Most Used Descriptor", value="Fresh")
+        st.metric(label="TOP DESCRIPTOR", value="Fresh")
         st.markdown('</div>', unsafe_allow_html=True)
     with col4:
         st.markdown('<div class="metric-card">', unsafe_allow_html=True)
-        st.metric(label="Most Used Ingredient", value="Citrus Oil")
+        st.metric(label="SIGNATURE INGREDIENT", value="Citrus Oil")
         st.markdown('</div>', unsafe_allow_html=True)
     
     # Project overview graph
@@ -185,52 +426,82 @@ if st.session_state.current_project is None:
     fig.update_layout(xaxis_title='Project', yaxis_title='Formulations', plot_bgcolor='rgba(0,0,0,0)')
     st.plotly_chart(fig, use_container_width=True)
     
-    # Project cards
-    st.subheader("Your Projects")
+    # Project cards with premium styling
+    st.markdown("""
+    <div class="fancy-header">
+        <span style="float:left">📂 Your Project Portfolio</span>
+        <span style="float:right; font-size: 0.8em; font-weight: normal; opacity: 0.8;">Premium Access</span>
+        <div style="clear:both"></div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Display projects in a grid
+    # Display projects in a grid with enhanced styling
     cols = st.columns(3)
     for i, (name, details) in enumerate(st.session_state.projects.items()):
         with cols[i % 3]:
-            st.markdown(f'<div class="project-card">', unsafe_allow_html=True)
-            st.subheader(name)
-            st.caption(f"Created: {details['created']}")
-            st.caption(f"Formulations: {details['formulations']}")
-            st.text(details['description'])
+            # Enhanced project card with visual indicators
+            st.markdown(f'''
+            <div class="project-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h3 style="margin: 0; color: #3a2f5b;">{name}</h3>
+                    <span style="background-color: #3a2f5b; color: white; padding: 3px 8px; 
+                           border-radius: 12px; font-size: 0.7em;">ACTIVE</span>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 10px; color: #666;">
+                    <div>📅 {details['created']}</div>
+                    <div>🧪 {details['formulations']} formulations</div>
+                </div>
+                <p style="color: #444; margin-bottom: 15px; font-size: 0.95em;">{details['description']}</p>
+            </div>
+            ''', unsafe_allow_html=True)
             
-            # Small radar chart for each project
+            # Small radar chart for each project with improved styling
             profile_df = pd.DataFrame({
                 'Attribute': list(details['profile'].keys()),
                 'Value': list(details['profile'].values())
             })
             fig = px.line_polar(profile_df, r='Value', theta='Attribute', line_close=True)
-            fig.update_layout(height=200, margin=dict(l=20, r=20, t=20, b=20))
+            fig.update_layout(
+                height=200, 
+                margin=dict(l=20, r=20, t=20, b=20),
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0, 7],
+                        linecolor='#3a2f5b',
+                        gridcolor='#f0f0f0'
+                    ),
+                    angularaxis=dict(
+                        linecolor='#3a2f5b',
+                        gridcolor='#f0f0f0'
+                    )
+                ),
+                paper_bgcolor='rgba(0,0,0,0)',
+                plot_bgcolor='rgba(0,0,0,0)',
+                font=dict(color='#444')
+            )
+            fig.update_traces(
+                fill='toself',
+                fillcolor='rgba(184, 151, 61, 0.2)',
+                line=dict(color='#b8973d', width=2)
+            )
             st.plotly_chart(fig, use_container_width=True)
             
-            if st.button("Open", key=f"open_{name}"):
+            if st.button("Open Project", key=f"open_{name}"):
                 st.session_state.current_project = name
                 st.experimental_rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
     
-    # Create New Project Form
-    st.header("Create New Project")
-    with st.form("new_project_form"):
-        new_project_name = st.text_input("Project Name")
-        new_project_desc = st.text_area("Project Description", placeholder="Describe your fragrance project...")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            fruity = st.slider("Fruity", 0, 7, 0)
-            floral = st.slider("Floral", 0, 7, 0)
-            spicy = st.slider("Spicy", 0, 7, 0)
-            sweet = st.slider("Sweet", 0, 7, 0)
-        with col2:
-            woody = st.slider("Woody", 0, 7, 0)
-            fresh = st.slider("Fresh", 0, 7, 0)
-            herbal = st.slider("Herbal", 0, 7, 0)
-            citrus = st.slider("Citrus", 0, 7, 0)
-        
-        submit_btn = st.form_submit_button("Create Project")
+    # Create New Project Form with premium styling
+    st.markdown("""
+    <div class="fancy-header" style="background: linear-gradient(90deg, #b8973d 0%, #d4b052 100%);">
+        <i class="fas fa-plus-circle"></i> Create New Fragrance Project
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="info-box" style="margin-bottom: 20px;">
+        <p style="margin: 0; color: #444;">
+            Create a new fragrance project by providing a name,
         
         if submit_btn and new_project_name:
             profile = {}
